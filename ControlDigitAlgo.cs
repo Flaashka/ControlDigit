@@ -1,14 +1,12 @@
 using System;
+using System.Collections.Generic;
 using System.Linq;
 
 namespace SRP.ControlDigit
 {
     public static class Extensions
     {
-        // Вспомогательные методы-расширения поместите в этот класс.
-        // Они должны быть понятны и потенциально полезны вне контекста задачи расчета контрольных разрядов.
-        
-        public static int[] ToDigits(this long number)
+        public static IEnumerable<int> ToDigits(this long number)
         {
             var numberString = number.ToString();
             var digits = numberString
@@ -81,7 +79,25 @@ namespace SRP.ControlDigit
         
         public static int Luhn(long number)
         {
-            throw new NotImplementedException();
+            var digits = number.ToDigits();
+            var reverseDigits = digits.Reverse().ToArray();
+            for (var index = 0; index < reverseDigits.Length; index++)
+                if (index % 2 == 0)
+                    reverseDigits[index] *= 2;
+
+            return GetLuhnResult(reverseDigits);
+        }
+        
+        private static int GetLuhnResult(int[] digits)
+        {
+            for (var index = 0; index < digits.Length; index++)
+                if (digits[index] >= 10)
+                    digits[index] = ((long)digits[index]).ToDigits().Sum();
+            var remainder = digits.GetTotalSum(index => 1) % 10;
+            if (remainder == 0)
+                return 0;
+            
+            return 10 - remainder;
         }
     }
 }
