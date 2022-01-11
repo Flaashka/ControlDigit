@@ -35,6 +35,7 @@ namespace SRP.ControlDigit
         [Test]
         public void TestIsbn10()
         {
+            Assert.AreEqual('6', ControlDigitAlgo.Isbn10(226611156));
             Assert.AreEqual('0', ControlDigitAlgo.Isbn10(0));
             Assert.AreEqual('1', ControlDigitAlgo.Isbn10(020153082));
             Assert.AreEqual('9', ControlDigitAlgo.Isbn10(1));
